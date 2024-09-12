@@ -1,8 +1,36 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+  }
+  39% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 body {
   background-color: black;
   color: white;
   font-family: 'Roboto', sans-serif;
   margin: 0;
+  animation: fadeIn 0.3s ease;
 }
 
 nav {
@@ -32,6 +60,19 @@ nav {
       margin-left: 5px;
       height: 27px;
     }
+    
+    #logoHint {
+      position: absolute;
+      top: 50px;
+      background: rgb(50,50,50);
+      border-radius: 12px;
+      padding: 8px;
+      cursor: pointer;
+      filter: drop-shadow(0 0 0.75rem black);
+      animation: fadeOut 6s ease;
+      opacity: 0;
+      z-index: 999;
+    }
   }
   
   .search input {
@@ -51,10 +92,36 @@ nav {
   .search input:hover, .search input:not(:placeholder-shown) {
     background-color: rgb(50,50,50);
   }
+  
+  .buttonsRight {
+    justify-content: right;
+    position: absolute;
+    right: 0;
+    height: 70px;
+    
+    button, a {
+      position: relative;
+      top: 50%;
+      margin-right: 15px;
+      display: inline-flex;
+      transform: translateY(-50%);
+      padding: 12px;
+      border: 1px solid gray;
+      color: white;
+      text-decoration: none;
+      border-radius: 40px;
+      background: black;
+      transition: 0.2s ease;
+    }
+    
+    button:hover, a:hover {
+      background: rgb(40,40,40);
+    }
+  }
 }
 
 main {
-  margin-top: 115px;
+  margin-top: 70px;
   
   .videos {
     height: 100%;
@@ -70,14 +137,17 @@ main {
       overflow: hidden;
       display: inline-block;
       transition: 0.2s ease;
+      filter: drop-shadow(0 0 12px rgba(150,150,150,0.4));
       
       .title {
         margin-left: 10px;
         margin-top: 10px;
+        text-overflow: ellipsis;
       }
       
       .desc {
-        margin-left: 15px;
+        text-overflow: ellipsis;
+        margin-left: 10px;
         margin-top: -10px;
         color: rgb(150,150,150);
       }
@@ -87,6 +157,8 @@ main {
         height: 73%;
         width: 100%;
         object-fit: cover;
+        opacity: 0;
+        transition: 0.4s ease;
       }
     }
     
@@ -98,21 +170,25 @@ main {
 
 #videoPage {
   width: 100vw;
-  height: 91.9vw;
+  height: 91.9vh;
   background: black;
   position: fixed;
-  top: 8.1vh;
+  bottom: 0;
   /*transition-property: transform;*/
   transition: 0.2s ease;
   transform: translateY(100%);
-  position: fixed;
-  
-  video {
-    width: 60vw;
-    height: 40%;
+
+  video, iframe {
+    margin-top: 20px;
+    width: 97vw;
+    height: 600px;
     filter: drop-shadow(0 0 0.75rem gray);
     margin-left: 20px;
     border-radius: 20px;
+  }
+  
+  iframe {
+    border: none;
   }
   
   div.videoInfo {
@@ -124,6 +200,10 @@ main {
       height: 60px;
       width: 60px;
       border-radius: 50%;
+    }
+    
+    #videoTitle {
+      margin-top: -30px;
     }
     
     #videoDesc {

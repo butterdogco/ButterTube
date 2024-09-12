@@ -1,20 +1,29 @@
 const main = document.getElementById("main");
 const videoPage = document.getElementById("videoPage");
+const urlParams = new URLSearchParams(window.location.search);
+const videoSearchParam = urlParams.get('video');
 
 function logoClicked() {
   const videoElement = document.getElementById("video");
   videoElement.pause();
   videoPage.style.transform = "translateY(100%)";
+  const iframeElement = document.getElementById("iframe");
+  iframeElement.src = "";
+  
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.pushState({path:newurl},'',newurl);
+  }
 }
 
 function openVideo(id) {
   videoPage.style.transform = "translateY(0%)";
 
   const videoInfo = _videos[id];
-  const title = videoInfo.Title;
-  const desc = videoInfo.Description;
-  const creator = videoInfo.Creator;
-  const video = videoInfo.Video;
+  const title = videoInfo.Title || "Video";
+  const desc = videoInfo.Description || "No description";
+  const creator = videoInfo.Creator || "User";
+  const video = videoInfo.Video || "";
   
   const titleElement = document.getElementById("videoTitle");
   titleElement.innerText = title;
@@ -22,9 +31,23 @@ function openVideo(id) {
   descElement.innerText = desc;
   const creatorElement = document.getElementById("videoCreator");
   creatorElement.innerText = creator;
+  const iframeElement = document.getElementById("iframe");
   const videoElement = document.getElementById("video");
-  videoElement.src = video;
-  videoElement.play();
+  if (video.includes("drive.google.com")) {
+    iframeElement.style.display = "block";
+    videoElement.style.display = "none";
+    iframeElement.src = video;
+  } else {
+    videoElement.style.display = "block";
+    iframeElement.style.display = "none";
+    videoElement.src = video;
+    videoElement.play();
+  }
+  
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?video=${Number(id)}`;
+    window.history.pushState({path:newurl},'',newurl);
+  }
 }
 
 function subscribe(username) {
@@ -45,6 +68,9 @@ function createVideoElement(title, creator, thumbnail, id) {
   let img = document.createElement("img");
   img.className = "thumbnail";
   img.src = thumbnail;
+  img.onload = function(){
+    img.style.opacity = 1;
+  };
   div.appendChild(img);
   let pTitle = document.createElement("p");
   pTitle.innerText = title;
@@ -73,5 +99,9 @@ document.addEventListener(
   "finished",
   (e) => {
     createVideos(_videos);
+    
+    if (videoSearchParam) {
+      openVideo(Number(videoSearchParam));
+    }
   }
 );

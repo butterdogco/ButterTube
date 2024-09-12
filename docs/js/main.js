@@ -16,35 +16,56 @@ let _videos = [
     Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/boogle%20brome%20video%20thumbnail.png?raw=true",
     Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/advertise.mp4"
   },
+  {
+    Title:"INTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",
+    Description:"WELCOME TO SUS STUDIOS MAKE SURE TO LIKE AND SUBSCRIBE",
+    Creator:"SUS STUDIOS",
+    Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/SUS%20STUDIOS%20INTRO%20THUMBNAIL.png?raw=true",
+    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/SUS Studios Intro.mp4"
+  },
+  {
+    Title:"Digital HiTech Presentation",
+    Description:"Technology",
+    Creator:"Renderforest",
+    Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/presentation%20thumbnail.png?raw=true",
+    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/Digital HiTech Presentation_free.mp4"
+  }
 ];
 
-function processDriveLink(url) {
+function processDriveLink(url, makeLink, video) {
+  makeLink = makeLink || true;
+  video = video || false;
   let newURL = url;
   if (newURL.includes("drive.google.com")) {
     // is google drive
-    const driveId = response[5].toString().replace('https://drive.google.com/open?id=', '');
-    const newDriveURL = `https://drive.google.com/thumbnail?id=${driveId}`;
-    newURL = newImageUrl;
-  } else {
-    // is a regular web url
+    newURL = newURL.replace('https://drive.google.com/open?id=', '');
+    if (makeLink === true) {
+      if (video) {
+        newURL = `https://drive.google.com/file/d/${newURL}/preview`;
+      } else if (!newURL.includes("https://drive.google.com/thumbnail?id=")) {
+        newURL = `https://drive.google.com/thumbnail?id=${newURL}`;
+      }
+    }
   }
   return newURL;
 }
 
 function getData() {
+  /*
   document.dispatchEvent(finished);
   return;
+    */
   
-  const spreadsheetId = "18fBvUB7EX17xC9-GEodixsVfd2W0spWbeskQsZZNIhI";
-  const sheetName = "Form Responses 1";
+  const spreadsheetId = "1LlL8mrSXTTV6qHOkUKd57oVb0uZATq037Wg4ltlDreg";
+  const sheetName = "Form Responses 3";
   const sheetId = "AIzaSyBie4PasgrxYkF7LRl8zcCGUsnBnwZ8pWE";
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${sheetId}`;
 
   fetch(url)
     .then(response => response.json())
-    .then(dat => {
-      if (dat) {
-        const responseData = formatData(dat);
+    .then(data => {
+      if (data) {
+        const responseData = formatData(data);
         _videos.push(...responseData);
         done = true;
         document.dispatchEvent(finished);
@@ -53,20 +74,20 @@ function getData() {
     .catch(error => console.error(error));
 }
 
-function formatData(dat) {
+function formatData(data) {
   const formattedData = [];
   var articleCount = 0;
-
-  for (let i = 1; i < dat.values.length; i++) {
-    const response = dat.values[i];
+  
+  for (let i = 1; i < data.values.length; i++) {
+    const response = data.values[i];
     const responseNumber = i + 1; // add 1 to ignore header
-    var imageURL = "img/placeholder thumbnail.png";
+    var imageURL = processDriveLink(response[3], true, false);
 
     if (response) {
       var image = response[6] || imageURL;
       if (image.includes("https://")) {
         // is a web url
-        image = processDriveLink(image);
+        image = processDriveLink(image.toString(), true);
       } else {
         // is a local url so remove ../
         image = image.replace(/\.\.\//i, "");
@@ -82,11 +103,11 @@ function formatData(dat) {
         Description: response[5],
         Creator: response[2],
         Thumbnail: image,
-        Video: image,
+        Video: processDriveLink(response[3], true, true),
       };
       
-      let approved = response[7];
-      if (approved) {
+      let approved = response[7] || "yes";
+      if (approved === "yes") {
         formattedData.push(item);
       }
     }
@@ -96,7 +117,7 @@ function formatData(dat) {
 }
 
 getData();
-
+ 
 // 0|A = date made
 // 1|B = email
 // 2|C = creator
