@@ -3,182 +3,43 @@
 <html>
   <head>
     <title>YouTube Kids</title>
-    <link rel="shortcut icon" href="https://butterdogco.com/youtube-kids/img/youtube kids square.png">
-    <style>
-    
-      body {
-        background-color: black;
-        color: white;
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-      }
-      
-      nav {
-        width: 100vw;
-        height: 8vh;
-        top: 0;
-        position: fixed;
-        left: 0 ;
-        border-bottom: 1px solid gray;
-        display: inline-flex;
-      }
-      
-      nav .logo {
-        display: inline-flex;
-        margin-left: 20px;
-        cursor: default;
-      }
-      
-      nav .logo h1 {
-        color: white;
-      }
-      
-      nav .logo h1.kids {
-        color: black;
-        background: rgb(255, 145, 0);
-        border-radius: 4px;
-        padding: 0.3vh;
-        margin-left: 5px;
-        height: 3vh;
-      }
-      
-      nav .search input {
-        border-radius: 30px;
-        transform: translateX(-50%);
-        position: fixed;
-        top: 2.4vh;
-        left: 50%;
-        color: white;
-        background-color: rgb(40,40,40);
-        border: none;
-        padding: 5px;
-      }
-      
-      main {
-        margin-top: 115px;
-      }
-      
-      main .video {
-        background-color: rgb(20,20,20);
-        width: 300px;
-        height: 250px;
-        margin: 30px;
-        border-radius: 10px;
-        cursor: pointer;
-        overflow: hidden;
-        transition: 0.2s ease;
-      }
-      
-      main .video:hover {
-        filter: brightness(90%);
-      }
-      
-      main .video .title {
-        margin-left: 10px;
-        margin-top: 10px;
-      }
-      
-      main .video .desc {
-        margin-left: 15px;
-        margin-top: -10px;
-        color: rgb(150,150,150);
-      }
-      
-      main .video img {
-        margin: 0;
-        height: 73%;
-        width: 100%;
-      }
-      
-      #videoPage {
-        width: 100vw;
-        height: 92vw;
-        background: black;
-        z-index: 999;
-        position: fixed;
-        top: 8.1vh;
-        display: none;
-      }
-      
-      #videoPage video {
-        width: 60vw;
-        height: 40%;
-        filter: drop-shadow(0 0 0.75rem gray);
-        margin-left: 20px;
-        border-radius: 20px;
-      }
-      
-      #videoPage div.user {
-        display: inline-flex;
-        margin-left: 30px;
-        margin-top: 30px;
-      }
-      
-      #videoPage div.user img {
-        height: 60px;
-        width: 60px;
-        border-radius: 50%;
-      }
-      
-      #videoPage div.user p {
-        font-weight: bold;
-        margin-left: 10px;
-        margin-top: 10px;
-      }
-      
-      #videoPage button.subscribe {
-        width: 100px;
-        height: 30px;
-        border-radius: 40px;
-        border: none;
-        color: black;
-        font-weight: bold;
-        margin-top: 30px;
-        margin-left: -180px;
-        cursor: pointer;
-      }
-      
-    </style>
+    <link rel="shortcut icon" href="https://github.com/butterdogceo/youtube-kids/blob/main/docs/img/youtube%20kids%20square.png?raw=true">
+    <link rel="stylesheet" href="css/home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <nav>
-      <div class="logo">
+      <div class="logo" onclick="logoClicked()">
         <h1>YouTube</h1>
         <h1 class="kids">Kids</h1>
       </div>
       <div class="search">
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="Search">
       </div>
     </nav>
     <main id="main">
-      <div class="video" onclick="video()">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRRakK8jdJdfrdQaIWzPM6YllwG0ZPIcb46oQVnY6T&s">
-        <p class="title"><b>SLOW DOWN!</b></p>
-        <p class="desc">beaverton school district</p>
+      <div id="videos" class="videos">
+        <!--
+        <div class="video" onclick="openVideo()">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRRakK8jdJdfrdQaIWzPM6YllwG0ZPIcb46oQVnY6T&s">
+          <p class="title">SLOW DOWN!</p>
+          <p class="desc">beaverton school district</p>
+        </div>
+        -->
       </div>
     </main>
     <div id="videoPage">
-      <video src="https://b-dog.co/videos/slow down - youtube kids.mp4" controls="1"></video>
+      <video src="" controls="1" id="video"></video>
       <br>
-      <div class="user">
-        <img src="https://media.licdn.com/dms/image/C560BAQF32SQfj83R1w/company-logo_200_200/0/1592262210552?e=2147483647&v=beta&t=FpwL5Yj534xsDcVgaSMwPkQ4rCMCx93wtJnKWatoTqM">
-        <p>beaverton school district</p>
+      <div class="videoInfo">
+        <h2 id="videoTitle">Title</h2>
+        <p id="videoDesc">Desc</p>
+        <p id="videoCreator">User</p>
         <button class="subscribe" id="subscribe" onclick="subscribe()">Subscribe</button>
       </div>
     </div>
-    <script>
     
-      function video() {
-        document.getElementById('main').style.display = "none;"
-        document.getElementById('videoPage').style.display = "block";
-      }
-      
-      function subscribe() {
-        document.getElementById('subscribe').innerHTML = 'Subscribed';
-        document.getElementById('subscribe').style.background = 'rgb(40,40,40)';
-        document.getElementById('subscribe').style.color = 'white';
-      }
-      
-    </script>
+    <script src="js/home.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
