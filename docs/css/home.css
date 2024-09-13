@@ -42,6 +42,7 @@ nav {
   z-index: 2;
   border-bottom: 2px solid rgba(255,255,255,0.5);
   display: inline-flex;
+  background: black;
   
   .logo {
     display: inline-flex;
@@ -204,10 +205,6 @@ main {
     
     #videoTitle {
       margin-top: -30px;
-    }
-    
-    #videoDesc {
-      
     }
     
     #videoCreator {
