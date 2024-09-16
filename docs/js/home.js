@@ -1,14 +1,17 @@
+let currentVideoInfo;
+
 const main = document.getElementById("main");
 const videoPage = document.getElementById("videoPage");
 const urlParams = new URLSearchParams(window.location.search);
 const videoSearchParam = urlParams.get('video');
+const channelSearchParam = urlParams.get('channel');
+
+let videoOpen = false;
+let channelOpen = false;
 
 function logoClicked() {
-  const videoElement = document.getElementById("video");
-  videoElement.pause();
-  videoPage.style.transform = "translateY(100%)";
-  const iframeElement = document.getElementById("iframe");
-  iframeElement.src = "";
+  closeVideo();
+  closeChannel();
   
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -16,8 +19,35 @@ function logoClicked() {
   }
 }
 
+function getSubscribed(creatorName) {
+  let subscribed = localstorage.getItem("subscribed") || [];
+  
+  if (creatorName === undefined) {
+    return subscribed;
+  } else {
+    let found = false;
+    subscribed.forEach(function(item, index) {
+      if (item === creatorName) {
+        found = true;
+      }
+    });
+    return found;
+  }
+}
+
+function closeVideo() {
+  videoOpen = false;
+  const videoElement = document.getElementById("video");
+  videoElement.pause();
+  videoPage.style.transform = "translateY(100%)";
+  const iframeElement = document.getElementById("iframe");
+  iframeElement.src = "";
+}
+
 function openVideo(id) {
+  videoOpen = true;
   videoPage.style.transform = "translateY(0%)";
+  closeChannel();
 
   const videoInfo = _videos[id];
   const title = videoInfo.Title || "Video";
@@ -25,12 +55,17 @@ function openVideo(id) {
   const creator = videoInfo.Creator || "User";
   const video = videoInfo.Video || "";
   
+  currentVideoInfo = videoInfo;
+  
   const titleElement = document.getElementById("videoTitle");
   titleElement.innerText = title;
   const descElement = document.getElementById("videoDesc");
   descElement.innerText = desc;
   const creatorElement = document.getElementById("videoCreator");
   creatorElement.innerText = creator;
+  creatorElement.onclick = function() {
+    openChannel(creator);
+  };
   const iframeElement = document.getElementById("iframe");
   const videoElement = document.getElementById("video");
   if (video.includes("drive.google.com")) {
@@ -46,6 +81,40 @@ function openVideo(id) {
   
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?video=${Number(id)}`;
+    window.history.pushState({path:newurl},'',newurl);
+  }
+}
+
+function closeChannel() {
+  channelOpen = false;
+  const videoElement = document.getElementById("video");
+  if (videoElement) {
+    videoElement.pause();
+  }
+  channelPage.style.transform = "translateY(100%)";
+}
+
+function openChannel(channelName) {
+  const videosElement = document.getElementById("channelVideos");
+  channelOpen = true;
+  channelPage.style.transform = "translateY(0%)";
+  document.getElementById("channelName").innerText = channelName;
+  videosElement.innerHTML = "";
+  
+  _videos.forEach(function(item, index) {
+    if (item.Creator === channelName) {
+      let videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, index);
+      videosElement.appendChild(videoElement);
+    }
+  });
+  
+  if (videosElement.innerHTML !== "") {
+    const notice = document.createElement("p");
+    videosElement.appendChild(notice);
+  }
+  
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?channel=${channelName}`;
     window.history.pushState({path:newurl},'',newurl);
   }
 }
@@ -102,6 +171,8 @@ document.addEventListener(
     
     if (videoSearchParam) {
       openVideo(Number(videoSearchParam));
+    } else if (channelSearchParam) {
+      openChannel(channelSearchParam);
     }
   }
 );
