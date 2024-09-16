@@ -32,10 +32,10 @@ let _videos = [
   }
 ];
 
+let _shuffledVideos = [];
+
 function shuffle(array) {
   let currentIndex = array.length;
-
-  // While there remain elements to shuffle...
   while (currentIndex !== 0) {
 
     // Pick a remaining element...
@@ -67,11 +67,6 @@ function processDriveLink(url, makeLink, video) {
 }
 
 function getData() {
-  /*
-  document.dispatchEvent(finished);
-  return;
-    */
-  
   const spreadsheetId = "1LlL8mrSXTTV6qHOkUKd57oVb0uZATq037Wg4ltlDreg";
   const sheetName = "Form Responses 3";
   const sheetId = "AIzaSyBie4PasgrxYkF7LRl8zcCGUsnBnwZ8pWE";
@@ -83,7 +78,8 @@ function getData() {
       if (data) {
         const responseData = formatData(data);
         _videos.push(...responseData);
-        shuffle(_videos);
+        _shuffledVideos.push(..._videos);
+        shuffle(_shuffledVideos);
         done = true;
         document.dispatchEvent(finished);
       }

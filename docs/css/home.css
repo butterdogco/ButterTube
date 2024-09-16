@@ -243,13 +243,14 @@ main {
 #channelPage {
   width: 100vw;
   height: 91.9vh;
-  background: black;
   position: fixed;
   bottom: 0;
   transition: 0.2s ease;
   transform: translateY(100%);
   z-index: 2;
   text-align: center;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(40,40,40,1) 100%);
 }
 
 .hidden {

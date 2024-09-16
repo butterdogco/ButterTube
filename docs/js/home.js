@@ -5,11 +5,13 @@ const videoPage = document.getElementById("videoPage");
 const urlParams = new URLSearchParams(window.location.search);
 const videoSearchParam = urlParams.get('video');
 const channelSearchParam = urlParams.get('channel');
+const websiteName = "YouTube Kids";
 
 let videoOpen = false;
 let channelOpen = false;
 
 function logoClicked() {
+  document.title = websiteName;
   closeVideo();
   closeChannel();
   
@@ -54,6 +56,8 @@ function openVideo(id) {
   const desc = videoInfo.Description || "No description";
   const creator = videoInfo.Creator || "User";
   const video = videoInfo.Video || "";
+  
+  document.title = title + ` | ${websiteName}`;
   
   currentVideoInfo = videoInfo;
   
@@ -100,6 +104,7 @@ function openChannel(channelName) {
   channelPage.style.transform = "translateY(0%)";
   document.getElementById("channelName").innerText = channelName;
   videosElement.innerHTML = "";
+  document.title = "@" + channelName + ` | ${websiteName}`;
   
   _videos.forEach(function(item, index) {
     if (item.Creator === channelName) {
@@ -146,8 +151,11 @@ function createVideoElement(title, creator, thumbnail, id) {
   pTitle.className = "title";
   div.appendChild(pTitle);
   let pCreator = document.createElement("p");
-  pCreator.innerText = creator;
+  pCreator.innerText = "@" + creator;
   pCreator.className = "desc";
+  pCreator.onclick = function() {
+    openChannel(creator);
+  };
   div.appendChild(pCreator);
   
   div.addEventListener("click", function() {
@@ -159,7 +167,7 @@ function createVideoElement(title, creator, thumbnail, id) {
 
 function createVideos(data) {
   data.forEach(function(item, index) {
-    let videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, index);
+    let videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, _videos.indexOf(item));
     document.getElementById("videos").appendChild(videoElement);
   });
 }
@@ -167,7 +175,7 @@ function createVideos(data) {
 document.addEventListener(
   "finished",
   (e) => {
-    createVideos(_videos);
+    createVideos(_shuffledVideos);
     
     if (videoSearchParam) {
       openVideo(Number(videoSearchParam));
