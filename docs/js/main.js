@@ -79,6 +79,7 @@ function getData() {
         const responseData = formatData(data);
         _videos.push(...responseData);
         _shuffledVideos.push(..._videos);
+        _shuffledVideos.push(..._ads);
         shuffle(_shuffledVideos);
         done = true;
         document.dispatchEvent(finished);

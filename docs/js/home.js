@@ -5,19 +5,59 @@ const videoPage = document.getElementById("videoPage");
 const urlParams = new URLSearchParams(window.location.search);
 const videoSearchParam = urlParams.get('video');
 const channelSearchParam = urlParams.get('channel');
+const searchParam = urlParams.get('search');
 const websiteName = "YouTube Kids";
 
+let searching = false;
 let videoOpen = false;
 let channelOpen = false;
 
-function logoClicked() {
+function home() {
   document.title = websiteName;
   closeVideo();
   closeChannel();
   
+  if (searching) {
+    document.getElementById("search").value = "";
+    createVideos(_shuffledVideos);
+    searching = false;
+  }
+  
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     window.history.pushState({path:newurl},'',newurl);
+  }
+}
+
+function search(query) {
+  if (typeof(query) !== "string") {
+    if (query.key !== "Enter") {
+      return;
+    } else {
+      query = document.getElementById("search").value;
+    }
+  }
+  
+  home();
+  searching = true;
+  
+  document.getElementById("videos").innerHTML = "";
+  if (query === "") {
+    home();
+  } else {
+    document.title = `${query} | Search | ${websiteName}`;
+    
+    _shuffledVideos.forEach(function(item) {
+      if (item.Title.toLowerCase().includes(query.toLowerCase()) || item.Creator.toLowerCase().includes(query.toLowerCase())) {
+        let element = createVideoElement(item.Title, item.Creator, item.Thumbnail, _videos.indexOf(item));
+        document.getElementById("videos").appendChild(element);
+      }
+    });
+    
+    if (history.pushState) {
+      var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?search=${query}`;
+      window.history.pushState({path:newurl},'',newurl);
+    }
   }
 }
 
@@ -57,7 +97,7 @@ function openVideo(id) {
   const creator = videoInfo.Creator || "User";
   const video = videoInfo.Video || "";
   
-  document.title = title + ` | ${websiteName}`;
+  document.title = `${title} | ${websiteName}`;
   
   currentVideoInfo = videoInfo;
   
@@ -104,7 +144,7 @@ function openChannel(channelName) {
   channelPage.style.transform = "translateY(0%)";
   document.getElementById("channelName").innerText = channelName;
   videosElement.innerHTML = "";
-  document.title = "@" + channelName + ` | ${websiteName}`;
+  document.title = `@${channelName} | ${websiteName}`;
   
   _videos.forEach(function(item, index) {
     if (item.Creator === channelName) {
@@ -128,6 +168,33 @@ function subscribe(username) {
   let button = document.getElementById("subscribe");
   button.innerHTML = 'Subscribed';
   button.classList.add("subscribed");
+}
+
+function createAdElement(hint, image, link) {
+  hint = hint || "";
+  image = image || "";
+  link = link || "";
+  
+  let div = document.createElement("div");
+  div.classList.add("ad");
+  div.title = hint;
+  let a = document.createElement("a");
+  a.href = link;
+  a.target = "_blank";
+  div.appendChild(a);
+  let img = document.createElement("img");
+  img.src = image;
+  img.className = "thumbnail";
+  img.onload = function(){
+    img.style.opacity = 1;
+  };
+  div.appendChild(img);
+  let p = document.createElement("p");
+  p.innerText = "Advertisement";
+  p.classList.add("desc");
+  div.appendChild(p);
+  
+  return div;
 }
 
 function createVideoElement(title, creator, thumbnail, id) {
@@ -166,9 +233,15 @@ function createVideoElement(title, creator, thumbnail, id) {
 }
 
 function createVideos(data) {
+  document.getElementById("videos").innerHTML = "";
   data.forEach(function(item, index) {
-    let videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, _videos.indexOf(item));
-    document.getElementById("videos").appendChild(videoElement);
+    if (!item.Ad) {
+      let videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, _videos.indexOf(item));
+      document.getElementById("videos").appendChild(videoElement);
+    } else {
+      let adElement = createAdElement("ad",item.Image,item.Link);
+      document.getElementById("videos").appendChild(adElement);
+    }
   });
 }
 
@@ -181,6 +254,8 @@ document.addEventListener(
       openVideo(Number(videoSearchParam));
     } else if (channelSearchParam) {
       openChannel(channelSearchParam);
+    } else if (searchParam) {
+      search(searchParam);
     }
   }
 );

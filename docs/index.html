@@ -9,16 +9,16 @@
   </head>
   <body>
     <nav>
-      <div class="logo" onclick="logoClicked()">
+      <div class="logo" onclick="home()">
         <h1>YouTube</h1>
         <h1 class="kids">Kids</h1>
         <div id="logoHint">
           <p>^ Click the logo to return to the home page</p>
         </div>
       </div>
-      <!-- <div class="search">
-        <input type="text" placeholder="Search">
-      </div> -->
+      <div class="search">
+        <input type="text" placeholder="Search" id="search" onkeydown="search(event)">
+      </div>
       <div class="buttonsRight">
         <a href="https://forms.gle/saeN3wAJgZhNMq4N8" target="_blank">Upload</a>
       </div>
@@ -55,6 +55,7 @@
       </div>
     </div>
     
+    <script src="js/ads.js"></script>
     <script src="js/home.js"></script>
     <script src="js/main.js"></script>
   </body>
