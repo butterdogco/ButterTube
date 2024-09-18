@@ -245,17 +245,27 @@ function createVideos(data) {
   });
 }
 
+function readURL(returnHome) {
+  if (videoSearchParam) {
+    openVideo(Number(videoSearchParam));
+  } else if (channelSearchParam) {
+    openChannel(channelSearchParam);
+  } else if (searchParam) {
+    search(searchParam);
+  } else if (returnHome) {
+    home();
+  }
+}
+
+window.addEventListener('popstate', () => {
+  readURL(true);
+});
+
 document.addEventListener(
   "finished",
   (e) => {
     createVideos(_shuffledVideos);
     
-    if (videoSearchParam) {
-      openVideo(Number(videoSearchParam));
-    } else if (channelSearchParam) {
-      openChannel(channelSearchParam);
-    } else if (searchParam) {
-      search(searchParam);
-    }
+    readURL(false);
   }
 );
