@@ -191,7 +191,7 @@ main {
       margin: 0;
       height: 73%;
       width: 100%;
-      object-fit: cover;
+      object-fit: fill;
       opacity: 0;
       transition: 0.4s ease;
     }
