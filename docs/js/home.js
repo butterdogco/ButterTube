@@ -178,10 +178,6 @@ function createAdElement(hint, image, link) {
   let div = document.createElement("div");
   div.classList.add("ad");
   div.title = hint;
-  let a = document.createElement("a");
-  a.href = link;
-  a.target = "_blank";
-  div.appendChild(a);
   let img = document.createElement("img");
   img.src = image;
   img.className = "thumbnail";
@@ -193,6 +189,10 @@ function createAdElement(hint, image, link) {
   p.innerText = "Advertisement";
   p.classList.add("desc");
   div.appendChild(p);
+  let a = document.createElement("a");
+  a.href = link;
+  a.target = "_blank";
+  div.appendChild(a);
   
   return div;
 }
