@@ -18,5 +18,10 @@ let _ads = [
     Link:"https://www.amazon.com/dp/B0BN66Y4SV?_encoding=UTF8&psc=1&ref_=cm_sw_r_cp_ud_dp_NA4H9FEHQ9VY0NZBTFX2&starsLeft=1",
     Image:"img/peanut butter.png",
     Ad:true
+  },
+  {
+    Link:"https://match.com",
+    Image:"img/hot men.png",
+    Ad:true
   }
 ];

@@ -18,7 +18,7 @@ function home() {
   closeChannel();
   
   if (searching) {
-    document.getElementById("search").value = "";
+    // document.getElementById("search").value = "";
     createVideos(_shuffledVideos);
     searching = false;
   }
@@ -47,7 +47,7 @@ function search(query) {
   } else {
     document.title = `${query} | Search | ${websiteName}`;
     
-    _shuffledVideos.forEach(function(item) {
+    _videos.forEach(function(item) {
       if (item.Title.toLowerCase().includes(query.toLowerCase()) || item.Creator.toLowerCase().includes(query.toLowerCase())) {
         let element = createVideoElement(item.Title, item.Creator, item.Thumbnail, _videos.indexOf(item));
         document.getElementById("videos").appendChild(element);

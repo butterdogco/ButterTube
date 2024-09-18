@@ -25,6 +25,31 @@
   }
 }
 
+@keyframes adIdle {
+  0% {
+    filter: contrast(400%);
+  }
+  25% {
+    filter: contrast(100%);
+    transform: rotate(0deg);
+  }
+  50% {
+    filter: contrast(500%);
+    transform: rotate(5deg);
+    width: 150%;
+    height: 150%;
+    margin-top: -25%;
+    margin-left: -25%;
+  }
+  75% {
+    filter: contrast(100%);
+    transform: rotate(0deg);
+  }
+  100% {
+    filter: contrast(400%);
+  }
+}
+
 body {
   background-color: black;
   color: white;
@@ -200,6 +225,8 @@ main {
       height: 100%;
       width: 100%;
       object-fit: fill;
+      animation: adIdle 3s linear;
+      animation-iteration-count: 999999999999999999999999999;
     }
   }
   
