@@ -156,6 +156,9 @@ main {
 .videos {
   height: 100%;
   width: 100vw;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   
   .video, .ad {
     background-color: rgb(20,20,20);
@@ -165,9 +168,13 @@ main {
     border-radius: 10px;
     cursor: pointer;
     overflow: hidden;
-    display: inline-block;
     transition: 0.2s ease;
+    flex-grow: 0;
     filter: drop-shadow(0 0 12px rgba(150,150,150,0.4));
+    
+    * {
+      display: block;
+    }
     
     a {
       text-decoration: none;
@@ -178,6 +185,8 @@ main {
       margin-left: 10px;
       margin-top: 10px;
       text-overflow: ellipsis;
+      overflow: hidden;
+      max-height: 20px;
     }
     
     .desc {
@@ -302,6 +311,11 @@ main {
       height: 1.75rem;
       margin-top: -5px;
       margin-bottom: -20px;
+      text-overflow: ellipsis;
+      word-break: break-all;
+      max-width: 100%;
+      max-height: 40%;
+      overflow-x: hidden;
     }
     
     #videoDesc {
@@ -343,6 +357,31 @@ main {
     button.subscribed {
       color: white;
       background: rgb(60,60,60);
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  #videoPage {
+    display: block;
+    justify-content: center;
+    
+    video, iframe {
+      min-width: 0;
+      float: none;
+      height: 40%;
+      width: 94vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    div.videoInfo {
+      float: none;
+      width: 80vw;
+      min-width: 0;
+      max-width: 80vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
   }
 }
