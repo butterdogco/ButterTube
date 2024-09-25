@@ -62,18 +62,42 @@ function search(query) {
 }
 
 function getSubscribed(creatorName) {
-  let subscribed = localstorage.getItem("subscribed") || [];
+  let subscribed;
+  if (localStorage.getItem("subscribed")) {
+    subscribed = JSON.parse(localStorage.getItem("subscribed"));
+  } else {
+    subscribed = [];
+  }
   
   if (creatorName === undefined) {
     return subscribed;
   } else {
     let found = false;
-    subscribed.forEach(function(item, index) {
+      subscribed.forEach(function(item, index) {
       if (item === creatorName) {
         found = true;
       }
     });
     return found;
+  }
+}
+
+function subscribe(username) {
+  let button = document.getElementById("subscribe");
+  if (getSubscribed(username) === true) {
+    button.innerHTML = 'Subscribe';
+    button.classList.remove("subscribed");
+    
+    let subbedTo = getSubscribed();
+    subbedTo.splice(subbedTo.indexOf(username), 1);
+    localStorage.setItem("subscribed", JSON.stringify(subbedTo));
+  } else {
+    button.innerHTML = 'Subscribed';
+    button.classList.add("subscribed");
+    
+    let subbedTo = getSubscribed();
+    subbedTo.push(username);
+    localStorage.setItem("subscribed", JSON.stringify(subbedTo));
   }
 }
 
@@ -122,7 +146,20 @@ function openVideo(id) {
     videoElement.src = video;
     videoElement.play();
   }
-  
+  const subscribeElement = document.getElementById("subscribe");
+  if (getSubscribed(creator) === true) {
+    subscribeElement.classList.add("subscribed");
+    subscribeElement.innerText = "Subscribed";
+  } else {
+    if (subscribeElement.classList.contains("subscribed")) {
+     subscribeElement.classList.remove("subscribed");
+    }
+    subscribeElement.innerText = "Subscribe";
+  }
+  subscribeElement.onclick = function() {
+    subscribe(creator);
+  }
+
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?video=${Number(id)}`;
     window.history.pushState({path:newurl},'',newurl);
@@ -162,12 +199,6 @@ function openChannel(channelName) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?channel=${channelName}`;
     window.history.pushState({path:newurl},'',newurl);
   }
-}
-
-function subscribe(username) {
-  let button = document.getElementById("subscribe");
-  button.innerHTML = 'Subscribed';
-  button.classList.add("subscribed");
 }
 
 function createAdElement(hint, image, link) {
