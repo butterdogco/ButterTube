@@ -206,26 +206,24 @@ function createAdElement(hint, image, link) {
   image = image || "";
   link = link || "";
   
-  let div = document.createElement("div");
-  div.classList.add("ad");
-  div.title = hint;
-  let img = document.createElement("img");
+  const a = document.createElement("a");
+  a.classList.add("ad");
+  a.title = hint;
+  a.href = link;
+  a.target = "_blank";
+  const img = document.createElement("img");
   img.src = image;
   img.className = "thumbnail";
   img.onload = function(){
     img.style.opacity = 1;
   };
-  div.appendChild(img);
-  let p = document.createElement("p");
+  a.appendChild(img);
+  const p = document.createElement("p");
   p.innerText = "Advertisement";
   p.classList.add("desc");
-  div.appendChild(p);
-  let a = document.createElement("a");
-  a.href = link;
-  a.target = "_blank";
-  div.appendChild(a);
+  a.appendChild(p);
   
-  return div;
+  return a;
 }
 
 function createVideoElement(title, creator, thumbnail, id) {
