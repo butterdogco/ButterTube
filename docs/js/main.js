@@ -69,19 +69,18 @@ function getData() {
 
   fetch(url, {
     headers: { 'Content-Type': 'application/json' },
-    body: { sheet: 'YT_KIDS' }
+    method: 'POST',
+    body: JSON.stringify({ sheet: 'YT_KIDS' })
   })
     .then(response => response.json())
     .then(responseJSON => {
       const { success, data } = responseJSON;
       if (!success) {
-        console.error('Failed to get videos');
-        return;
+        throw new Error('Success was not true');
       }
 
       if (!data) {
-        console.error('No video data recieved');
-        return;
+        throw new Error('No data was recieved');
       }
       
       const formattedData = formatData(data);
@@ -92,7 +91,7 @@ function getData() {
       done = true;
       document.dispatchEvent(finished);
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error('Error fetching videos:', error));
 }
 
 function formatData(data) {
