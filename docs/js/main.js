@@ -3,32 +3,32 @@ let done = false;
 
 let _videos = [
   {
-    Title:"SLOW DOWN!",
-    Description:"MINECRAFT LET'S PLAY",
-    Creator:"Beaverton School District",
-    Thumbnail:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRRakK8jdJdfrdQaIWzPM6YllwG0ZPIcb46oQVnY6T&s",
-    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/slow%20down%20-%20youtube%20kids.mp4"
+    Title: "SLOW DOWN!",
+    Description: "MINECRAFT LET'S PLAY",
+    Creator: "Beaverton School District",
+    Thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRRakK8jdJdfrdQaIWzPM6YllwG0ZPIcb46oQVnY6T&s",
+    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/slow%20down%20-%20youtube%20kids.mp4"
   },
   {
-    Title:"Introducing: Boogle Brome",
-    Description:"HELO",
-    Creator:"Boogle",
-    Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/boogle%20brome%20video%20thumbnail.png?raw=true",
-    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/advertise.mp4"
+    Title: "Introducing: Boogle Brome",
+    Description: "HELO",
+    Creator: "Boogle",
+    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/boogle%20brome%20video%20thumbnail.png?raw=true",
+    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/advertise.mp4"
   },
   {
-    Title:"INTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",
-    Description:"WELCOME TO SUS STUDIOS MAKE SURE TO LIKE AND SUBSCRIBE",
-    Creator:"SUS STUDIOS",
-    Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/SUS%20STUDIOS%20INTRO%20THUMBNAIL.png?raw=true",
-    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/SUS Studios Intro.mp4"
+    Title: "INTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",
+    Description: "WELCOME TO SUS STUDIOS MAKE SURE TO LIKE AND SUBSCRIBE",
+    Creator: "SUS STUDIOS",
+    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/SUS%20STUDIOS%20INTRO%20THUMBNAIL.png?raw=true",
+    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/SUS Studios Intro.mp4"
   },
   {
-    Title:"Digital HiTech Presentation",
-    Description:"Technology",
-    Creator:"Renderforest",
-    Thumbnail:"https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/presentation%20thumbnail.png?raw=true",
-    Video:"https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/Digital HiTech Presentation_free.mp4"
+    Title: "Digital HiTech Presentation",
+    Description: "Technology",
+    Creator: "Renderforest",
+    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/presentation%20thumbnail.png?raw=true",
+    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/Digital HiTech Presentation_free.mp4"
   }
 ];
 
@@ -37,14 +37,12 @@ let _shuffledVideos = [];
 function shuffle(array) {
   let currentIndex = array.length;
   while (currentIndex !== 0) {
-
     // Pick a remaining element...
     let randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
     // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
   }
 }
 
@@ -67,38 +65,47 @@ function processDriveLink(url, makeLink, video) {
 }
 
 function getData() {
-  const spreadsheetId = "1LlL8mrSXTTV6qHOkUKd57oVb0uZATq037Wg4ltlDreg";
-  const sheetName = "Form Responses 3";
-  const sheetId = "AIzaSyBie4PasgrxYkF7LRl8zcCGUsnBnwZ8pWE";
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${sheetId}`;
+  const url = `https://wikabedia-backend.fly.dev/get`;
 
-  fetch(url)
+  fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    body: { sheet: 'YT_KIDS' }
+  })
     .then(response => response.json())
-    .then(data => {
-      if (data) {
-        const responseData = formatData(data);
-        _videos.push(...responseData);
-        _shuffledVideos.push(..._videos);
-        _shuffledVideos.push(..._ads);
-        shuffle(_shuffledVideos);
-        done = true;
-        document.dispatchEvent(finished);
+    .then(responseJSON => {
+      const { success, data } = responseJSON;
+      if (!success) {
+        console.error('Failed to get videos');
+        return;
       }
+
+      if (!data) {
+        console.error('No video data recieved');
+        return;
+      }
+      
+      const formattedData = formatData(data);
+      _videos.push(...formattedData);
+      _shuffledVideos.push(..._videos);
+      _shuffledVideos.push(..._ads);
+      shuffle(_shuffledVideos);
+      done = true;
+      document.dispatchEvent(finished);
     })
     .catch(error => console.error(error));
 }
 
 function formatData(data) {
   const formattedData = [];
-  var articleCount = 0;
+  let articleCount = 0;
   
   for (let i = 1; i < data.values.length; i++) {
     const response = data.values[i];
     const responseNumber = i + 1; // add 1 to ignore header
-    var imageURL = processDriveLink(response[3], true, false);
+    let imageURL = processDriveLink(response[3], true, false);
 
     if (response) {
-      var image = response[6] || imageURL;
+      let image = response[6] || imageURL;
       if (image.includes("https://")) {
         // is a web url
         image = processDriveLink(image.toString(), true);
@@ -120,7 +127,7 @@ function formatData(data) {
         Video: processDriveLink(response[3], true, true),
       };
       
-      let approved = response[7] || "yes";
+      const approved = response[7] || "yes";
       if (approved === "yes") {
         formattedData.push(item);
       }
