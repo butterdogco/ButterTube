@@ -1,4 +1,5 @@
 const finished = new Event("finished");
+const apiUrl = `https://wikabedia-backend.fly.dev/get`;
 let done = false;
 
 let _videos = [
@@ -7,28 +8,28 @@ let _videos = [
     Description: "MINECRAFT LET'S PLAY",
     Creator: "Beaverton School District",
     Thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRRakK8jdJdfrdQaIWzPM6YllwG0ZPIcb46oQVnY6T&s",
-    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/slow%20down%20-%20youtube%20kids.mp4"
+    Video: "https://butterdogco.com/videos/slow%20down%20-%20youtube%20kids.mp4"
   },
   {
     Title: "Introducing: Boogle Brome",
     Description: "HELO",
     Creator: "Boogle",
-    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/boogle%20brome%20video%20thumbnail.png?raw=true",
-    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/advertise.mp4"
+    Thumbnail: "https://butterdogco.com/img/boogle%20brome%20video%20thumbnail.png?raw=true",
+    Video: "https://butterdogco.com/videos/advertise.mp4"
   },
   {
     Title: "INTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",
     Description: "WELCOME TO SUS STUDIOS MAKE SURE TO LIKE AND SUBSCRIBE",
     Creator: "SUS STUDIOS",
-    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/SUS%20STUDIOS%20INTRO%20THUMBNAIL.png?raw=true",
-    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/SUS Studios Intro.mp4"
+    Thumbnail: "https://butterdogco.com/img/SUS%20STUDIOS%20INTRO%20THUMBNAIL.png?raw=true",
+    Video: "https://butterdogco.com/videos/SUS Studios Intro.mp4"
   },
   {
     Title: "Digital HiTech Presentation",
     Description: "Technology",
     Creator: "Renderforest",
-    Thumbnail: "https://github.com/butterdogco/butterdogco.github.io/blob/main/docs/img/presentation%20thumbnail.png?raw=true",
-    Video: "https://github.com/butterdogco/butterdogco.github.io/raw/main/docs/videos/Digital HiTech Presentation_free.mp4"
+    Thumbnail: "https://butterdogco.com/img/presentation%20thumbnail.png",
+    Video: "https://butterdogco.com/videos/Digital HiTech Presentation_free.mp4"
   }
 ];
 
@@ -65,9 +66,7 @@ function processDriveLink(url, makeLink, video) {
 }
 
 function getData() {
-  const url = `https://wikabedia-backend.fly.dev/get`;
-
-  fetch(url, {
+  fetch(apiUrl, {
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
     body: JSON.stringify({ sheet: 'YT_KIDS' })
