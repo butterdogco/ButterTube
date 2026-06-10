@@ -69,4 +69,29 @@ const advertisements = [
   }
 ];
 
-export { videos, advertisements };
+/**
+ * Loading messages array
+ * @type {Array<string>}
+ */
+const loadingMessages = [
+  "THE VIDEOS ARE BEING LOADED PLS WAIT",
+  "LOOOOOAAAADDDDIIIINNNNNGGGG",
+  "we are loading plz wait",
+  "HELLO pls wait",
+  "Installing virus...",
+  "Loading videos... (this may take a while because our servers suck)",
+  "YOUR VIDEOS ARE BEING BUTTERED...",
+  "HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO HELLO",
+  "hi pls click all the ads and install all the viruses to support us",
+  "hold on we're hacking NASA rn",
+  "This would load faster if you didn't use Google Chrome",
+  "Fire goes pretty well with Foxes",
+  "Implementing ID age verification and vibecoding security measures...",
+  "Welcome to Earf",
+  "Data is the new oil.",
+  "DedSec!",
+  "We are currently experiencing nothing significant. Please wait...",
+  "Did you know your phone isn't listening to you, but it's rather everything being interconnected and data is being collected and analyzed to predict your behavior and sell you products? No? Well, now you do. Please wait while we load the videos."
+];
+
+export { videos, advertisements, loadingMessages };

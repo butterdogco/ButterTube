@@ -1,4 +1,4 @@
-import { videos, advertisements } from "./data.js";
+import { videos, advertisements, loadingMessages } from "./data.js";
 
 const main = document.getElementById("main");
 const sidebar = document.getElementById("sidebar");
@@ -9,6 +9,9 @@ const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const mobileSearchForm = document.getElementById("mobileSidebarSearchForm");
 const mobileSearchInput = document.getElementById("mobileSidebarSearchInput");
+const loadingContainer = document.getElementById("loadingContainer");
+const loadingMessage = document.getElementById("loadingMessage");
+const loadingError = document.getElementById("loadingError");
 const videosContainer = document.getElementById("videos");
 const videoPage = document.getElementById("videoPage");
 const videoElement = document.getElementById("video");
@@ -410,8 +413,13 @@ window.addEventListener('popstate', () => {
   readURL(true);
 });
 document.addEventListener("DOMContentLoaded", () => {
+  loadingMessage.innerText = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
   getData().then(() => {
+    loadingContainer.remove();
     createVideos(loadedVideos);
     readURL(false);
+  }).catch((error) => {
+    console.error('Error initializing app:', error);
+    loadingError.innerText = "An error occurred while loading videos. Please try again later.";
   });
 });

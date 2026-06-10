@@ -5,17 +5,22 @@
   <meta charset="UTF-8">
   <title>ButterTube</title>
   <link rel="icon" href="./img/buttertube-icon.png" type="image/png">
-  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="./css/home.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home,menu">
-  <meta content="Buttertube" property="og:title">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" sizes="256x256" href="./img/buttertube-square.jpg">
+  <meta name="description" content="ButterTube is the BESTEST video platform on EARTH.">
+  <meta content="ButterTube" property="og:title">
   <meta content="te BESTEST video platform on EARHT" property="og:description">
   <meta content="https://butterdogco.com/ButterTube/" property="og:url">
-  <meta content="https://butterdogco.com/ButterTube/img/buttertube-wide.png" property="og:image">
-  <meta content="#eb8634" data-react-helmet="true" name="theme-color">
+  <meta content="https://butterdogco.com/ButterTube/img/buttertube-thumbnail.jpg" property="og:image">
+  <meta content="#eff146" data-react-helmet="true" name="theme-color">
+  <script defer src="https://stats.butterdogco.com/script.js" data-website-id="f89d9bc3-6551-4bef-a04d-02e18710fe69"></script>
   <script src="https://cdn.jsdelivr.net/npm/ios-pwa-splash@1.0.0/cdn.min.js"></script>
-  <script>iosPWASplash('img/general/buttertube-icon.png', '#eb8634');</script>
+  <script>iosPWASplash('img/buttertube-icon.png', '#eff146');</script>
 </head>
 
 <body>
@@ -62,6 +67,12 @@
   </nav>
 
   <main id="main">
+    <div class="loading" id="loadingContainer" role="status" aria-live="polite">
+      <div class="spinner"></div>
+      <span id="loadingMessage">...</span>
+      <span id="loadingError" class="error" role="alert" aria-live="assertive"></span>
+    </div>
+
     <div id="videos" class="videos"></div>
   </main>
 
@@ -72,7 +83,7 @@
   </section>
 
   <section id="videoPage" class="homeOverlay">
-    <video controls="1" id="video"></video>
+    <video controls="1" id="video" playsinline></video>
     <iframe allow="autoplay" allowfullscreen id="iframe"></iframe>
     <div class="videoInfo">
       <h2 id="videoTitle" class="title">Title</h2>
