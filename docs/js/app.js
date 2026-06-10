@@ -36,7 +36,6 @@ let searching = false;
 let videoOpen = false;
 let channelOpen = false;
 let loadedVideos = [...videos, ...advertisements];
-let unshuffledVideoIds = loadedVideos.map((_, index) => index);
 
 function processDriveLink(url, makeLink, video) {
   makeLink = makeLink || true;
@@ -89,8 +88,6 @@ async function getData() {
 
     const formattedData = formatData(data);
     loadedVideos.push(...formattedData);
-    loadedVideos = shuffleArray(loadedVideos);
-    unshuffledVideoIds = loadedVideos.map((_, index) => index);
   } catch (error) {
     console.error('Error processing videos:', error);
   }
@@ -370,14 +367,19 @@ function createVideoElement(title, creator, thumbnail, id) {
 
 function createVideos(data) {
   videosContainer.innerHTML = "";
+
+  let elementsToAdd = [];
   data.forEach(function (item, index) {
     if (item.Type != "ad") {
-      const videoElement = createVideoElement(item.Title, item.Creator, item.Thumbnail, index);
-      videosContainer.appendChild(videoElement);
+      elementsToAdd.push(createVideoElement(item.Title, item.Creator, item.Thumbnail, index));
     } else {
-      const adElement = createAdElement("ad", item.Image, item.Link);
-      videosContainer.appendChild(adElement);
+      elementsToAdd.push(createAdElement("ad", item.Image, item.Link));
     }
+  });
+
+  const shuffledData = shuffleArray(elementsToAdd);
+  shuffledData.forEach(function (element) {
+    videosContainer.appendChild(element);
   });
 }
 
