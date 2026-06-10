@@ -363,6 +363,7 @@ main {
 
   iframe {
     border: none;
+    min-height: 485px;
   }
 
   div.videoInfo {
